@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://api-backend-contracting-testing-ahmed-amer-projects.vercel.app/api',
+  apiUrl: 'https://api-backend-contracting-testing.vercel.app/api',
 };
