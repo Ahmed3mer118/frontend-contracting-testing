@@ -1,6 +1,7 @@
 import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { DecimalPipe, DatePipe } from '@angular/common';
+import { DatePipe } from '@angular/common';
+import { SmartDecimalPipe } from '../../../../shared/pipes/smart-decimal.pipe';
 import { TranslatePipe } from '../../../../shared/pipes/translate.pipe';
 import { DateFilterComponent } from '../../../../shared/components/date-filter/date-filter.component';
 import { ModalComponent } from '../../../../shared/components/modal/modal.component';
@@ -16,7 +17,7 @@ type TxRow = BankTransaction & { bank_name: string; seq: number; balance: number
 @Component({
   selector: 'app-banks-page',
   standalone: true,
-  imports: [FormsModule, DecimalPipe, DatePipe, TranslatePipe, DateFilterComponent, ModalComponent, LoadingSpinnerComponent],
+  imports: [FormsModule, SmartDecimalPipe, DatePipe, TranslatePipe, DateFilterComponent, ModalComponent, LoadingSpinnerComponent],
   template: `
     <app-loading-spinner [show]="loading()" />
     <div class="space-y-6">
@@ -30,10 +31,10 @@ type TxRow = BankTransaction & { bank_name: string; seq: number; balance: number
       <app-date-filter (filterChange)="load($event)" />
       @if (summary()) {
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div class="stat-card border-s-emerald-500"><p class="text-sm text-slate-500">{{ 'BANKS.TOTAL_DEPOSITS' | t }}</p><p class="text-xl font-bold">{{ summary()!['total_deposits'] | number:'1.2-2' }}</p></div>
-          <div class="stat-card border-s-amber-500"><p class="text-sm text-slate-500">{{ 'BANKS.TOTAL_WITHDRAWALS' | t }}</p><p class="text-xl font-bold">{{ summary()!['total_withdrawals'] | number:'1.2-2' }}</p></div>
-          <div class="stat-card border-s-rose-500"><p class="text-sm text-slate-500">{{ 'BANKS.TOTAL_EXPENSES' | t }}</p><p class="text-xl font-bold">{{ summary()!['total_expenses'] | number:'1.2-2' }}</p></div>
-          <div class="stat-card border-s-teal-500"><p class="text-sm text-slate-500">{{ 'BANKS.TOTAL_INTEREST' | t }}</p><p class="text-xl font-bold">{{ summary()!['total_interest'] | number:'1.2-2' }}</p></div>
+          <div class="stat-card border-s-emerald-500"><p class="text-sm text-slate-500">{{ 'BANKS.TOTAL_DEPOSITS' | t }}</p><p class="text-xl font-bold">{{ summary()!['total_deposits'] | smartDecimal }}</p></div>
+          <div class="stat-card border-s-amber-500"><p class="text-sm text-slate-500">{{ 'BANKS.TOTAL_WITHDRAWALS' | t }}</p><p class="text-xl font-bold">{{ summary()!['total_withdrawals'] | smartDecimal }}</p></div>
+          <div class="stat-card border-s-rose-500"><p class="text-sm text-slate-500">{{ 'BANKS.TOTAL_EXPENSES' | t }}</p><p class="text-xl font-bold">{{ summary()!['total_expenses'] | smartDecimal }}</p></div>
+          <div class="stat-card border-s-teal-500"><p class="text-sm text-slate-500">{{ 'BANKS.TOTAL_INTEREST' | t }}</p><p class="text-xl font-bold">{{ summary()!['total_interest'] | smartDecimal }}</p></div>
         </div>
       }
       <div class="table-wrap">
@@ -59,12 +60,12 @@ type TxRow = BankTransaction & { bank_name: string; seq: number; balance: number
                 <td>{{ tx.seq }}</td>
                 <td>{{ tx.client_name || '—' }}</td>
                 <td>{{ tx.bank_name }}</td>
-                <td>{{ depositOf(tx) | number:'1.2-2' }}</td>
-                <td>{{ withdrawalOf(tx) | number:'1.2-2' }}</td>
-                <td>{{ expenseOf(tx) | number:'1.2-2' }}</td>
-                <td>{{ interestOf(tx) | number:'1.2-2' }}</td>
+                <td>{{ depositOf(tx) | smartDecimal }}</td>
+                <td>{{ withdrawalOf(tx) | smartDecimal }}</td>
+                <td>{{ expenseOf(tx) | smartDecimal }}</td>
+                <td>{{ interestOf(tx) | smartDecimal }}</td>
                 <td>{{ tx.transaction_date | date:'shortDate' }}</td>
-                <td class="font-semibold">{{ tx.balance | number:'1.2-2' }}</td>
+                <td class="font-semibold">{{ tx.balance | smartDecimal }}</td>
                 <td class="flex gap-1">
                   <button type="button" class="btn-secondary !py-1 !px-2" (click)="openEditTx(tx)">{{ 'COMMON.EDIT' | t }}</button>
                   <button type="button" class="btn-danger !py-1 !px-2" (click)="deleteTx(tx)">{{ 'COMMON.DELETE' | t }}</button>
@@ -101,7 +102,7 @@ type TxRow = BankTransaction & { bank_name: string; seq: number; balance: number
         <div class="form-field"><label class="form-label">{{ 'BANKS.INTEREST' | t }}</label><input class="input" type="number" [(ngModel)]="txForm.interest_amount" /></div>
         <div class="form-field"><label class="form-label">{{ 'COMMON.DATE' | t }}</label><input class="input" type="date" [(ngModel)]="txForm.transaction_date" /></div>
         <div class="form-field md:col-span-2">
-          <p class="text-sm text-slate-500">{{ 'BANKS.BALANCE_FORMULA' | t }}: <strong>{{ previewBalance() | number:'1.2-2' }}</strong></p>
+          <p class="text-sm text-slate-500">{{ 'BANKS.BALANCE_FORMULA' | t }}: <strong>{{ previewBalance() | smartDecimal }}</strong></p>
         </div>
       </div>
       <div modal-footer class="flex gap-2 justify-end w-full">

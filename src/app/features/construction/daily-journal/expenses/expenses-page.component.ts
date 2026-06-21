@@ -1,7 +1,8 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { DecimalPipe, DatePipe } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { TranslatePipe } from '../../../../shared/pipes/translate.pipe';
+import { SmartDecimalPipe } from '../../../../shared/pipes/smart-decimal.pipe';
 import { DateFilterComponent, DateFilterValue } from '../../../../shared/components/date-filter/date-filter.component';
 import { matchesSearch } from '../../../../shared/utils/filter.util';
 import { ModalComponent } from '../../../../shared/components/modal/modal.component';
@@ -16,7 +17,7 @@ import { Expense, TotalsMap } from '../../models/construction.models';
 @Component({
   selector: 'app-expenses-page',
   standalone: true,
-  imports: [FormsModule, DecimalPipe, DatePipe, TranslatePipe, DateFilterComponent, ModalComponent, LoadingSpinnerComponent],
+  imports: [FormsModule, SmartDecimalPipe, DatePipe, TranslatePipe, DateFilterComponent, ModalComponent, LoadingSpinnerComponent],
   template: `
     <app-loading-spinner [show]="initialLoading()" />
     <div class="space-y-6">
@@ -27,31 +28,35 @@ import { Expense, TotalsMap } from '../../models/construction.models';
       <app-date-filter [showSearch]="true" searchPlaceholderKey="EXPENSES.SEARCH_PLACEHOLDER" (filterChange)="load($event)" />
       @if (totals()) {
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div class="stat-card border-s-emerald-500"><p class="text-sm text-slate-500">{{ 'EXPENSES.TOTAL_EXPENSES' | t }}</p><p class="text-xl font-bold">{{ totals()!['totalPayments'] | number:'1.2-2' }}</p></div>
+          <div class="stat-card border-s-emerald-500"><p class="text-sm text-slate-500">{{ 'EXPENSES.TOTAL_EXPENSES' | t }}</p><p class="text-xl font-bold">{{ totals()!['totalPayments'] | smartDecimal }}</p></div>
           <div class="stat-card border-s-teal-500"><p class="text-sm text-slate-500">{{ 'EXPENSES.RECORDS' | t }}</p><p class="text-xl font-bold">{{ totals()!['count'] }}</p></div>
         </div>
       }
       <div class="table-wrap">
         <table class="data-table">
-          <thead><tr><th>{{ 'EXPENSES.DESCRIPTION' | t }}</th><th>{{ 'COMMON.PAYMENT' | t }}</th><th>{{ 'COMMON.DATE' | t }}</th></tr></thead>
+          <thead><tr><th>{{ 'EXPENSES.DESCRIPTION' | t }}</th><th>{{ 'COMMON.PAYMENT' | t }}</th><th>{{ 'COMMON.DATE' | t }}</th><th>{{ 'COMMON.ACTIONS' | t }}</th></tr></thead>
           <tbody>
             @for (e of items(); track e.id) {
               <tr>
                 <td>{{ translate.currentLang() === 'ar' ? e.description_ar : (e.description_en || e.description_ar) }}</td>
-                <td>{{ e.payment_amount | number:'1.2-2' }}</td>
+                <td>{{ e.payment_amount | smartDecimal }}</td>
                 <td>{{ e.transaction_date | date:'shortDate' }}</td>
+                <td class="flex gap-1">
+                  <button type="button" class="btn-secondary !py-1 !px-2" (click)="openEdit(e)">{{ 'COMMON.EDIT' | t }}</button>
+                  <button type="button" class="btn-danger !py-1 !px-2" (click)="deleteExpense(e.id)">{{ 'COMMON.DELETE' | t }}</button>
+                </td>
               </tr>
-            } @empty { <tr><td colspan="3" class="text-center py-8 text-slate-400">{{ 'COMMON.NO_DATA' | t }}</td></tr> }
+            } @empty { <tr><td colspan="4" class="text-center py-8 text-slate-400">{{ 'COMMON.NO_DATA' | t }}</td></tr> }
           </tbody>
         </table>
       </div>
     </div>
 
-    <app-modal [open]="modalOpen()" [title]="'EXPENSES.ADD_TITLE' | t" (close)="closeModal()">
+    <app-modal [open]="modalOpen()" [title]="editId ? ('EXPENSES.EDIT_TITLE' | t) : ('EXPENSES.ADD_TITLE' | t)" (close)="closeModal()">
       <div class="grid md:grid-cols-2 gap-4">
         <div class="form-field"><label class="form-label">{{ 'EXPENSES.DESCRIPTION' | t }}</label><input class="input" [(ngModel)]="form.description_ar" (ngModelChange)="saveDraft()" /></div>
         <div class="form-field"><label class="form-label">{{ 'EXPENSES.DESCRIPTION_EN' | t }}</label><input class="input" [(ngModel)]="form.description_en" (ngModelChange)="saveDraft()" /></div>
-        <div class="form-field"><label class="form-label">{{ 'COMMON.PAYMENT' | t }}</label><input class="input" type="number" [(ngModel)]="form.payment_amount" (ngModelChange)="saveDraft()" /></div>
+        <div class="form-field"><label class="form-label">{{ 'COMMON.PAYMENT' | t }}</label><input class="input" type="number" step="0.01" [(ngModel)]="form.payment_amount" (ngModelChange)="saveDraft()" /></div>
         <div class="form-field"><label class="form-label">{{ 'COMMON.DATE' | t }}</label><input class="input" type="date" [(ngModel)]="form.transaction_date" (ngModelChange)="saveDraft()" /></div>
       </div>
       <div modal-footer class="flex gap-2 justify-end w-full">
@@ -75,6 +80,7 @@ export class ExpensesPageComponent implements OnInit {
   initialLoading = signal(false);
   loading = signal(false);
   modalOpen = signal(false);
+  editId: string | null = null;
   form = this.emptyForm();
   private dateFilters: Record<string, string> = {};
   private searchQuery = '';
@@ -115,16 +121,31 @@ export class ExpensesPageComponent implements OnInit {
   }
 
   openAdd(): void {
+    this.editId = null;
     this.form = this.draft.load('expenses_add') ?? this.emptyForm();
     if (!this.form.description_en && this.form.description_ar) this.form.description_en = this.form.description_ar;
     this.modalOpen.set(true);
   }
 
-  closeModal(): void { this.modalOpen.set(false); }
+  openEdit(e: Expense): void {
+    this.editId = e.id;
+    this.form = {
+      description_ar: e.description_ar,
+      description_en: e.description_en || e.description_ar,
+      payment_amount: Number(e.payment_amount),
+      due_amount: 0,
+      transaction_date: String(e.transaction_date).slice(0, 10),
+    };
+    this.modalOpen.set(true);
+  }
+
+  closeModal(): void { this.modalOpen.set(false); this.editId = null; }
 
   saveDraft(): void {
-    if (!this.form.description_en && this.form.description_ar) this.form.description_en = this.form.description_ar;
-    this.draft.save('expenses_add', this.form);
+    if (!this.editId && !this.form.description_en && this.form.description_ar) {
+      this.form.description_en = this.form.description_ar;
+    }
+    if (!this.editId) this.draft.save('expenses_add', this.form);
   }
 
   clearForm(): void { this.form = this.emptyForm(); this.draft.clear('expenses_add'); }
@@ -139,12 +160,24 @@ export class ExpensesPageComponent implements OnInit {
     const body = { ...this.form, due_amount: 0, description_en: this.form.description_en || this.form.description_ar };
     this.loading.set(true);
     try {
-      await this.repo.create(pid, 'expenses', body);
+      if (this.editId) await this.repo.update(pid, 'expenses', this.editId, body);
+      else await this.repo.create(pid, 'expenses', body);
       this.toast.success(this.translate.instant('MESSAGES.SAVE_SUCCESS'));
       this.draft.clear('expenses_add');
       this.closeModal();
       await this.load({ ...this.dateFilters, reload: true });
     } catch { this.toast.error(this.translate.instant('MESSAGES.SAVE_ERROR')); }
     finally { this.loading.set(false); }
+  }
+
+  async deleteExpense(id: string): Promise<void> {
+    const pid = await this.projectContext.ensureReady();
+    if (!pid) return;
+    if (!confirm(this.translate.instant('MESSAGES.DELETE_CONFIRM'))) return;
+    try {
+      await this.repo.delete(pid, 'expenses', id);
+      this.toast.success(this.translate.instant('MESSAGES.DELETE_SUCCESS'));
+      await this.load({ ...this.dateFilters, reload: true });
+    } catch { this.toast.error(this.translate.instant('MESSAGES.SAVE_ERROR')); }
   }
 }

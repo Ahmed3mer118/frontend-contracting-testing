@@ -190,6 +190,7 @@
     "DESCRIPTION": "الوصف",
     "DESCRIPTION_EN": "الوصف (EN)",
     "ADD_TITLE": "إضافة مصروف",
+    "EDIT_TITLE": "تعديل مصروف",
     "SEARCH_PLACEHOLDER": "بحث بالوصف",
     "TOTAL_EXPENSES": "إجمالي المصروفات",
     "RECORDS": "عدد السجلات"

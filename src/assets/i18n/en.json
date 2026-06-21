@@ -190,6 +190,7 @@
     "DESCRIPTION": "Description",
     "DESCRIPTION_EN": "Description (EN)",
     "ADD_TITLE": "Add Expense",
+    "EDIT_TITLE": "Edit Expense",
     "SEARCH_PLACEHOLDER": "Search by description",
     "TOTAL_EXPENSES": "Total Expenses",
     "RECORDS": "Records Count"

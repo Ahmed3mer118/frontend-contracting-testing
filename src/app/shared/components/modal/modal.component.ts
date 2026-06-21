@@ -6,7 +6,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   template: `
     @if (open) {
       <div class="modal-backdrop" (click)="onBackdrop()">
-        <div class="modal-panel" (click)="$event.stopPropagation()">
+        <div class="modal-panel" [class.modal-panel-wide]="wide" (click)="$event.stopPropagation()">
           <div class="modal-header">
             <h3 class="modal-title">{{ title }}</h3>
             <button type="button" class="modal-close" (click)="close.emit()">&times;</button>
@@ -28,6 +28,7 @@ export class ModalComponent {
   @Input() open = false;
   @Input() title = '';
   @Input() showFooter = true;
+  @Input() wide = false;
   @Input() closeOnBackdrop = true;
   @Output() close = new EventEmitter<void>();
 

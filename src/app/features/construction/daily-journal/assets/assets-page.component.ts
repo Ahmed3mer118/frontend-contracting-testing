@@ -1,6 +1,7 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { DecimalPipe, DatePipe } from '@angular/common';
+import { DatePipe } from '@angular/common';
+import { SmartDecimalPipe } from '../../../../shared/pipes/smart-decimal.pipe';
 import { TranslatePipe } from '../../../../shared/pipes/translate.pipe';
 import { DateFilterComponent } from '../../../../shared/components/date-filter/date-filter.component';
 import { ModalComponent } from '../../../../shared/components/modal/modal.component';
@@ -14,7 +15,7 @@ import { Asset, TotalsMap } from '../../models/construction.models';
 @Component({
   selector: 'app-assets-page',
   standalone: true,
-  imports: [FormsModule, DecimalPipe, DatePipe, TranslatePipe, DateFilterComponent, ModalComponent, LoadingSpinnerComponent],
+  imports: [FormsModule, SmartDecimalPipe, DatePipe, TranslatePipe, DateFilterComponent, ModalComponent, LoadingSpinnerComponent],
   template: `
     <app-loading-spinner [show]="loading()" />
     <div class="space-y-6">
@@ -25,9 +26,9 @@ import { Asset, TotalsMap } from '../../models/construction.models';
       <app-date-filter (filterChange)="load($event)" />
       @if (totals()) {
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div class="stat-card border-s-blue-500"><p class="text-sm text-slate-500">{{ 'ASSETS.TOTAL_VALUE' | t }}</p><p class="text-xl font-bold">{{ totals()!['totalValue'] | number:'1.2-2' }}</p></div>
-          <div class="stat-card border-s-amber-500"><p class="text-sm text-slate-500">{{ 'ASSETS.TOTAL_DEPRECIATION' | t }}</p><p class="text-xl font-bold">{{ totals()!['totalDepreciation'] | number:'1.2-2' }}</p></div>
-          <div class="stat-card border-s-emerald-500"><p class="text-sm text-slate-500">{{ 'ASSETS.TOTAL_NET' | t }}</p><p class="text-xl font-bold">{{ totals()!['totalNet'] | number:'1.2-2' }}</p></div>
+          <div class="stat-card border-s-blue-500"><p class="text-sm text-slate-500">{{ 'ASSETS.TOTAL_VALUE' | t }}</p><p class="text-xl font-bold">{{ totals()!['totalValue'] | smartDecimal }}</p></div>
+          <div class="stat-card border-s-amber-500"><p class="text-sm text-slate-500">{{ 'ASSETS.TOTAL_DEPRECIATION' | t }}</p><p class="text-xl font-bold">{{ totals()!['totalDepreciation'] | smartDecimal }}</p></div>
+          <div class="stat-card border-s-emerald-500"><p class="text-sm text-slate-500">{{ 'ASSETS.TOTAL_NET' | t }}</p><p class="text-xl font-bold">{{ totals()!['totalNet'] | smartDecimal }}</p></div>
         </div>
       }
       <div class="table-wrap">
@@ -37,9 +38,9 @@ import { Asset, TotalsMap } from '../../models/construction.models';
             @for (a of items(); track a.id) {
               <tr>
                 <td>{{ translate.currentLang() === 'ar' ? a.name_ar : a.name_en }}</td>
-                <td>{{ a.value | number:'1.2-2' }}</td>
-                <td>{{ a.totalDepreciation | number:'1.2-2' }}</td>
-                <td class="font-medium text-emerald-600">{{ a.netAsset | number:'1.2-2' }}</td>
+                <td>{{ a.value | smartDecimal }}</td>
+                <td>{{ a.totalDepreciation | smartDecimal }}</td>
+                <td class="font-medium text-emerald-600">{{ a.netAsset | smartDecimal }}</td>
                 <td>{{ a.transaction_date | date:'shortDate' }}</td>
                 <td><button type="button" class="btn-secondary !py-1 !px-2" (click)="openEdit(a)">{{ 'COMMON.EDIT' | t }}</button></td>
               </tr>

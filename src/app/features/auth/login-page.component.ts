@@ -18,23 +18,7 @@ import { ToastService } from '../../core/services/toast.service';
           <p class="auth-card__subtitle">{{ 'AUTH.LOGIN_SUBTITLE' | t }}</p>
         </div>
 
-        <div class="auth-tabs">
-          <button type="button" class="auth-tab" [class.auth-tab--active]="mode() === 'local'" (click)="mode.set('local')">
-            {{ 'AUTH.LOCAL_LOGIN' | t }}
-          </button>
-          <button type="button" class="auth-tab" [class.auth-tab--active]="mode() === 'system'" (click)="mode.set('system')">
-            {{ 'AUTH.SYSTEM_LOGIN' | t }}
-          </button>
-        </div>
-
         <form class="auth-form" (ngSubmit)="submit()">
-          @if (mode() === 'system') {
-            <label class="auth-label">
-              <span>{{ 'AUTH.COMPANY_SLUG' | t }}</span>
-              <input class="input input-lg" [(ngModel)]="companySlug" name="companySlug" required autocomplete="organization" />
-            </label>
-          }
-
           <label class="auth-label">
             <span>{{ 'AUTH.EMAIL' | t }}</span>
             <input class="input input-lg" type="email" [(ngModel)]="email" name="email" required autocomplete="username" />
@@ -50,14 +34,10 @@ import { ToastService } from '../../core/services/toast.service';
           </button>
         </form>
 
-        @if (mode() === 'local') {
-          <p class="auth-footer">
-            {{ 'AUTH.NEED_VERIFY' | t }}
-            <a routerLink="/verify" [queryParams]="{ email }">{{ 'AUTH.VERIFY_LINK' | t }}</a>
-          </p>
-        } @else {
-          <p class="auth-hint">{{ 'AUTH.SYSTEM_HINT' | t }}</p>
-        }
+        <p class="auth-footer">
+          {{ 'AUTH.NEED_VERIFY' | t }}
+          <a routerLink="/verify" [queryParams]="{ email }">{{ 'AUTH.VERIFY_LINK' | t }}</a>
+        </p>
 
         <div class="auth-lang">
           <button type="button" class="auth-lang-btn" [class.auth-lang-btn--active]="translate.currentLang() === 'ar'" (click)="translate.use('ar')">AR</button>
@@ -74,10 +54,8 @@ export class LoginPageComponent implements OnInit {
   private toast = inject(ToastService);
   translate = inject(TranslateService);
 
-  mode = signal<'local' | 'system'>('local');
   email = '';
   password = '';
-  companySlug = '';
   loading = signal(false);
 
   ngOnInit(): void {
@@ -87,11 +65,7 @@ export class LoginPageComponent implements OnInit {
   async submit(): Promise<void> {
     this.loading.set(true);
     try {
-      if (this.mode() === 'system') {
-        await this.auth.loginSystem(this.email, this.password, this.companySlug);
-      } else {
-        await this.auth.loginLocal(this.email, this.password);
-      }
+      await this.auth.loginLocal(this.email, this.password);
       await this.router.navigate(['/construction/dashboard']);
     } catch (err) {
       const error = err as AuthApiError;

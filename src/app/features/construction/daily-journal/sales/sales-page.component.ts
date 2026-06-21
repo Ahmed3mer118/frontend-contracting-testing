@@ -1,6 +1,7 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { DecimalPipe, DatePipe } from '@angular/common';
+import { DatePipe } from '@angular/common';
+import { SmartDecimalPipe } from '../../../../shared/pipes/smart-decimal.pipe';
 import { TranslatePipe } from '../../../../shared/pipes/translate.pipe';
 
 import { DateFilterComponent, DateFilterValue } from '../../../../shared/components/date-filter/date-filter.component';
@@ -30,7 +31,7 @@ import { Sale, TotalsMap } from '../../models/construction.models';
 
   standalone: true,
 
-  imports: [FormsModule, DecimalPipe, DatePipe, TranslatePipe, DateFilterComponent, ModalComponent, LoadingSpinnerComponent],
+  imports: [FormsModule, SmartDecimalPipe, DatePipe, TranslatePipe, DateFilterComponent, ModalComponent, LoadingSpinnerComponent],
 
   template: `
 
@@ -52,11 +53,11 @@ import { Sale, TotalsMap } from '../../models/construction.models';
 
         <div class="grid grid-cols-3 gap-4">
 
-          <div class="stat-card border-s-emerald-500"><p class="text-sm text-slate-500">{{ 'SALES.TOTAL_CASH' | t }}</p><p class="text-xl font-bold">{{ totals()!['totalCash'] | number:'1.2-2' }}</p></div>
+          <div class="stat-card border-s-emerald-500"><p class="text-sm text-slate-500">{{ 'SALES.TOTAL_CASH' | t }}</p><p class="text-xl font-bold">{{ totals()!['totalCash'] | smartDecimal }}</p></div>
 
-          <div class="stat-card border-s-amber-500"><p class="text-sm text-slate-500">{{ 'SALES.TOTAL_CREDIT' | t }}</p><p class="text-xl font-bold">{{ totals()!['totalCredit'] | number:'1.2-2' }}</p></div>
+          <div class="stat-card border-s-amber-500"><p class="text-sm text-slate-500">{{ 'SALES.TOTAL_CREDIT' | t }}</p><p class="text-xl font-bold">{{ totals()!['totalCredit'] | smartDecimal }}</p></div>
 
-          <div class="stat-card border-s-teal-500"><p class="text-sm text-slate-500">{{ 'COMMON.TOTAL' | t }}</p><p class="text-xl font-bold">{{ totals()!['totalSales'] | number:'1.2-2' }}</p></div>
+          <div class="stat-card border-s-teal-500"><p class="text-sm text-slate-500">{{ 'COMMON.TOTAL' | t }}</p><p class="text-xl font-bold">{{ totals()!['totalSales'] | smartDecimal }}</p></div>
 
         </div>
 
@@ -76,7 +77,7 @@ import { Sale, TotalsMap } from '../../models/construction.models';
 
                 <td>{{ s.client_name }}</td><td>{{ s.invoice_number }}</td>
 
-                <td>{{ s.amount | number:'1.2-2' }}</td><td>{{ s.invoice_date | date:'shortDate' }}</td>
+                <td>{{ s.amount | smartDecimal }}</td><td>{{ s.invoice_date | date:'shortDate' }}</td>
 
                 <td><button type="button" class="btn-secondary !py-1 !px-2" (click)="openEdit(s)">{{ 'COMMON.EDIT' | t }}</button></td>
 

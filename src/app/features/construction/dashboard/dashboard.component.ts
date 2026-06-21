@@ -1,5 +1,5 @@
 import { Component, OnInit, inject, signal, computed } from '@angular/core';
-import { DecimalPipe } from '@angular/common';
+import { SmartDecimalPipe } from '../../../shared/pipes/smart-decimal.pipe';
 import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
 import { DateFilterComponent, DateFilterValue } from '../../../shared/components/date-filter/date-filter.component';
 import { LoadingSpinnerComponent } from '../../../shared/components/loading/loading-spinner.component';
@@ -30,7 +30,7 @@ interface ProjectSummary {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [DecimalPipe, TranslatePipe, DateFilterComponent, LoadingSpinnerComponent, BarChartComponent],
+  imports: [SmartDecimalPipe, TranslatePipe, DateFilterComponent, LoadingSpinnerComponent, BarChartComponent],
   template: `
     <app-loading-spinner [show]="initialLoading()" [message]="'APP.LOADING' | t" />
     <div class="space-y-6">
@@ -46,38 +46,38 @@ interface ProjectSummary {
             <div class="stat-card border-s-emerald-500">
               <p class="text-sm text-slate-500">{{ 'DASHBOARD.GROSS_PROFIT' | t }}</p>
               <p class="text-2xl font-bold" [class.text-emerald-600]="data()!.totals.grossProfit >= 0" [class.text-rose-600]="data()!.totals.grossProfit < 0">
-                {{ data()!.totals.grossProfit | number:'1.2-2' }} EGP
+                {{ data()!.totals.grossProfit | smartDecimal }} EGP
               </p>
             </div>
             <div class="stat-card border-s-teal-500">
               <p class="text-sm text-slate-500">{{ 'DASHBOARD.NET_PROFIT' | t }}</p>
               <p class="text-2xl font-bold" [class.text-teal-600]="data()!.totals.netProfit >= 0" [class.text-rose-600]="data()!.totals.netProfit < 0">
-                {{ data()!.totals.netProfit | number:'1.2-2' }} EGP
+                {{ data()!.totals.netProfit | smartDecimal }} EGP
               </p>
             </div>
             <div class="stat-card border-s-blue-500">
               <p class="text-sm text-slate-500">{{ 'DASHBOARD.TOTAL_SALES' | t }}</p>
-              <p class="text-2xl font-bold text-blue-600">{{ data()!.totals.totalSales | number:'1.2-2' }} EGP</p>
+              <p class="text-2xl font-bold text-blue-600">{{ data()!.totals.totalSales | smartDecimal }} EGP</p>
             </div>
             <div class="stat-card border-s-amber-500">
               <p class="text-sm text-slate-500">{{ 'DASHBOARD.TOTAL_PURCHASES' | t }}</p>
-              <p class="text-2xl font-bold text-amber-600">{{ data()!.totals.totalPurchases | number:'1.2-2' }} EGP</p>
+              <p class="text-2xl font-bold text-amber-600">{{ data()!.totals.totalPurchases | smartDecimal }} EGP</p>
             </div>
             <div class="stat-card border-s-violet-500">
               <p class="text-sm text-slate-500">{{ 'DASHBOARD.TOTAL_CONTRACTORS' | t }}</p>
-              <p class="text-2xl font-bold text-violet-600">{{ data()!.totals.totalContractors | number:'1.2-2' }} EGP</p>
+              <p class="text-2xl font-bold text-violet-600">{{ data()!.totals.totalContractors | smartDecimal }} EGP</p>
             </div>
             <div class="stat-card border-s-indigo-500">
               <p class="text-sm text-slate-500">{{ 'DASHBOARD.TOTAL_SUPPLIERS' | t }}</p>
-              <p class="text-2xl font-bold text-indigo-600">{{ data()!.totals.totalSuppliers | number:'1.2-2' }} EGP</p>
+              <p class="text-2xl font-bold text-indigo-600">{{ data()!.totals.totalSuppliers | smartDecimal }} EGP</p>
             </div>
             <div class="stat-card border-s-orange-500">
               <p class="text-sm text-slate-500">{{ 'DASHBOARD.TOTAL_EXPENSES' | t }}</p>
-              <p class="text-2xl font-bold text-orange-600">{{ data()!.totals.totalExpenses | number:'1.2-2' }} EGP</p>
+              <p class="text-2xl font-bold text-orange-600">{{ data()!.totals.totalExpenses | smartDecimal }} EGP</p>
             </div>
             <div class="stat-card border-s-rose-500">
               <p class="text-sm text-slate-500">{{ 'DASHBOARD.TOTAL_BANK_EXPENSES' | t }}</p>
-              <p class="text-2xl font-bold text-rose-600">{{ data()!.totals.totalBankExpenses | number:'1.2-2' }} EGP</p>
+              <p class="text-2xl font-bold text-rose-600">{{ data()!.totals.totalBankExpenses | smartDecimal }} EGP</p>
             </div>
           </div>
         </div>

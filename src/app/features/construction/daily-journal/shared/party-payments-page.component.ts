@@ -1,6 +1,7 @@
 import { Component, OnInit, inject, signal, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { DecimalPipe, DatePipe } from '@angular/common';
+import { DatePipe } from '@angular/common';
+import { SmartDecimalPipe } from '../../../../shared/pipes/smart-decimal.pipe';
 import { TranslatePipe } from '../../../../shared/pipes/translate.pipe';
 import { DateFilterComponent, DateFilterValue } from '../../../../shared/components/date-filter/date-filter.component';
 import { ModalComponent } from '../../../../shared/components/modal/modal.component';
@@ -18,7 +19,7 @@ interface PartyEntity { id: string; name_ar: string; name_en: string; }
 @Component({
   selector: 'app-party-payments-page',
   standalone: true,
-  imports: [FormsModule, DecimalPipe, DatePipe, TranslatePipe, DateFilterComponent, ModalComponent, LoadingSpinnerComponent],
+  imports: [FormsModule, SmartDecimalPipe, DatePipe, TranslatePipe, DateFilterComponent, ModalComponent, LoadingSpinnerComponent],
   template: `
     <app-loading-spinner [show]="initialLoading()" />
     <div class="space-y-6">
@@ -29,9 +30,9 @@ interface PartyEntity { id: string; name_ar: string; name_en: string; }
       <app-date-filter [showSearch]="true" searchPlaceholderKey="PARTIES.SEARCH_PLACEHOLDER" (filterChange)="load($event)" />
       @if (totals()) {
         <div class="grid grid-cols-3 gap-4">
-          <div class="stat-card border-s-teal-500"><p class="text-sm text-slate-500">{{ 'COMMON.PAYMENT' | t }}</p><p class="text-xl font-bold">{{ totals()!['totalPayments'] | number:'1.2-2' }}</p></div>
-          <div class="stat-card border-s-amber-500"><p class="text-sm text-slate-500">{{ 'COMMON.DUE' | t }}</p><p class="text-xl font-bold">{{ totals()!['totalDue'] | number:'1.2-2' }}</p></div>
-          <div class="stat-card border-s-emerald-500"><p class="text-sm text-slate-500">{{ 'COMMON.TOTAL' | t }}</p><p class="text-xl font-bold">{{ totals()!['total'] | number:'1.2-2' }}</p></div>
+          <div class="stat-card border-s-teal-500"><p class="text-sm text-slate-500">{{ 'COMMON.PAYMENT' | t }}</p><p class="text-xl font-bold">{{ totals()!['totalPayments'] | smartDecimal }}</p></div>
+          <div class="stat-card border-s-amber-500"><p class="text-sm text-slate-500">{{ 'COMMON.DUE' | t }}</p><p class="text-xl font-bold">{{ totals()!['totalDue'] | smartDecimal }}</p></div>
+          <div class="stat-card border-s-emerald-500"><p class="text-sm text-slate-500">{{ 'COMMON.TOTAL' | t }}</p><p class="text-xl font-bold">{{ totals()!['total'] | smartDecimal }}</p></div>
         </div>
       }
       <div class="table-wrap">
@@ -41,8 +42,8 @@ interface PartyEntity { id: string; name_ar: string; name_en: string; }
             @for (row of items(); track row.id) {
               <tr>
                 <td>{{ entityName(row) }}</td>
-                <td>{{ row.payment_amount | number:'1.2-2' }}</td>
-                <td>{{ row.due_amount | number:'1.2-2' }}</td>
+                <td>{{ row.payment_amount | smartDecimal }}</td>
+                <td>{{ row.due_amount | smartDecimal }}</td>
                 <td>{{ row.transaction_date | date:'shortDate' }}</td>
                 <td class="flex gap-1">
                   <button type="button" class="btn-secondary !py-1 !px-2" (click)="openEdit(row)">{{ 'COMMON.EDIT' | t }}</button>

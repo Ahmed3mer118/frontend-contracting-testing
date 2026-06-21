@@ -1,5 +1,6 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
-import { DecimalPipe, DatePipe } from '@angular/common';
+import { DatePipe } from '@angular/common';
+import { SmartDecimalPipe } from '../../../shared/pipes/smart-decimal.pipe';
 import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
 import { DateFilterComponent } from '../../../shared/components/date-filter/date-filter.component';
 import { LoadingSpinnerComponent } from '../../../shared/components/loading/loading-spinner.component';
@@ -11,7 +12,7 @@ import { TranslateService } from '../../../core/services/translate.service';
 @Component({
   selector: 'app-reports-page',
   standalone: true,
-  imports: [DecimalPipe, DatePipe, TranslatePipe, DateFilterComponent, LoadingSpinnerComponent],
+  imports: [SmartDecimalPipe, DatePipe, TranslatePipe, DateFilterComponent, LoadingSpinnerComponent],
   template: `
     <app-loading-spinner [show]="loading()" />
     <div class="space-y-6">
@@ -35,7 +36,7 @@ import { TranslateService } from '../../../core/services/translate.service';
                 @for (row of report()!.lists.inventory; track $index) {
                   <tr>
                     <td>{{ row.warehouse }}</td><td>{{ row.entry_date | date:'shortDate' }}</td><td>{{ row.item_name }}</td><td>{{ row.category }}</td>
-                    <td>{{ row.quantity_in }} m²</td><td>{{ row.remaining }} m²</td><td>{{ row.line_total | number:'1.2-2' }}</td>
+                    <td>{{ row.quantity_in | smartDecimal }} m²</td><td>{{ row.remaining | smartDecimal }} m²</td><td>{{ row.line_total | smartDecimal }}</td>
                   </tr>
                 } @empty { <tr><td colspan="7" class="text-center py-8 text-slate-400">{{ 'COMMON.NO_DATA' | t }}</td></tr> }
               </tbody>
@@ -50,8 +51,8 @@ import { TranslateService } from '../../../core/services/translate.service';
               <tbody>
                 @for (a of report()!.lists.assets; track a.id) {
                   <tr>
-                    <td>{{ a.name_ar }}</td><td>{{ a.value | number:'1.2-2' }}</td><td>{{ a.totalDepreciation | number:'1.2-2' }}</td>
-                    <td>{{ a.netAsset | number:'1.2-2' }}</td><td>{{ a.transaction_date | date:'shortDate' }}</td>
+                    <td>{{ a.name_ar }}</td><td>{{ a.value | smartDecimal }}</td><td>{{ a.totalDepreciation | smartDecimal }}</td>
+                    <td>{{ a.netAsset | smartDecimal }}</td><td>{{ a.transaction_date | date:'shortDate' }}</td>
                   </tr>
                 } @empty { <tr><td colspan="5" class="text-center py-8 text-slate-400">{{ 'COMMON.NO_DATA' | t }}</td></tr> }
               </tbody>
@@ -67,9 +68,9 @@ import { TranslateService } from '../../../core/services/translate.service';
                 @for (b of report()!.lists.banks; track $index) {
                   <tr>
                     <td>{{ b.seq }}</td><td>{{ b.client_name || '—' }}</td><td>{{ b.bank_name }}</td>
-                    <td>{{ b.deposit | number:'1.2-2' }}</td><td>{{ b.withdrawal | number:'1.2-2' }}</td>
-                    <td>{{ b.expense_amount | number:'1.2-2' }}</td><td>{{ b.interest_amount | number:'1.2-2' }}</td>
-                    <td>{{ b.transaction_date | date:'shortDate' }}</td><td>{{ b.balance | number:'1.2-2' }}</td>
+                    <td>{{ b.deposit | smartDecimal }}</td><td>{{ b.withdrawal | smartDecimal }}</td>
+                    <td>{{ b.expense_amount | smartDecimal }}</td><td>{{ b.interest_amount | smartDecimal }}</td>
+                    <td>{{ b.transaction_date | date:'shortDate' }}</td><td>{{ b.balance | smartDecimal }}</td>
                   </tr>
                 } @empty { <tr><td colspan="9" class="text-center py-8 text-slate-400">{{ 'COMMON.NO_DATA' | t }}</td></tr> }
               </tbody>
@@ -82,16 +83,16 @@ import { TranslateService } from '../../../core/services/translate.service';
             <div class="p-4 border-b"><h3 class="font-semibold">{{ 'REPORTS.INCOME_STATEMENT' | t }}</h3></div>
             <table class="data-table">
               <tbody>
-                <tr><td>{{ 'REPORTS.TOTAL_REVENUE' | t }}</td><td class="font-medium">{{ is().revenue | number:'1.2-2' }}</td></tr>
-                <tr><td class="ps-6">({{ 'REPORTS.COST_OF_REVENUE' | t }})</td><td>({{ is().costOfRevenue | number:'1.2-2' }})</td></tr>
-                <tr><td class="ps-6">({{ 'REPORTS.LATHE_DEPRECIATION' | t }})</td><td>({{ is().latheDepreciation | number:'1.2-2' }})</td></tr>
-                <tr class="font-bold text-emerald-700 bg-emerald-50"><td>{{ 'DASHBOARD.GROSS_PROFIT' | t }}</td><td>{{ is().grossProfit | number:'1.2-2' }}</td></tr>
-                <tr><td class="ps-6">({{ 'EXPENSES.TITLE' | t }})</td><td>({{ is().generalExpenses | number:'1.2-2' }})</td></tr>
-                <tr><td class="ps-6">({{ 'REPORTS.BANK_INTEREST_COMMISSIONS' | t }})</td><td>({{ is().bankInterestCommissions | number:'1.2-2' }})</td></tr>
-                <tr><td class="ps-6">({{ 'REPORTS.FURNITURE_DEPRECIATION' | t }})</td><td>({{ is().furnitureDepreciation | number:'1.2-2' }})</td></tr>
-                <tr class="font-bold text-teal-700 bg-teal-50"><td>{{ 'REPORTS.NET_BEFORE_TAX' | t }}</td><td>{{ is().netProfitBeforeTax | number:'1.2-2' }}</td></tr>
-                <tr><td class="ps-6">({{ 'REPORTS.TAX' | t }})</td><td>({{ is().tax | number:'1.2-2' }})</td></tr>
-                <tr class="font-bold text-slate-800 bg-slate-100"><td>{{ 'REPORTS.NET_AFTER_TAX' | t }}</td><td>{{ is().netProfitAfterTax | number:'1.2-2' }}</td></tr>
+                <tr><td>{{ 'REPORTS.TOTAL_REVENUE' | t }}</td><td class="font-medium">{{ is().revenue | smartDecimal }}</td></tr>
+                <tr><td class="ps-6">({{ 'REPORTS.COST_OF_REVENUE' | t }})</td><td>({{ is().costOfRevenue | smartDecimal }})</td></tr>
+                <tr><td class="ps-6">({{ 'REPORTS.LATHE_DEPRECIATION' | t }})</td><td>({{ is().latheDepreciation | smartDecimal }})</td></tr>
+                <tr class="font-bold text-emerald-700 bg-emerald-50"><td>{{ 'DASHBOARD.GROSS_PROFIT' | t }}</td><td>{{ is().grossProfit | smartDecimal }}</td></tr>
+                <tr><td class="ps-6">({{ 'EXPENSES.TITLE' | t }})</td><td>({{ is().generalExpenses | smartDecimal }})</td></tr>
+                <tr><td class="ps-6">({{ 'REPORTS.BANK_INTEREST_COMMISSIONS' | t }})</td><td>({{ is().bankInterestCommissions | smartDecimal }})</td></tr>
+                <tr><td class="ps-6">({{ 'REPORTS.FURNITURE_DEPRECIATION' | t }})</td><td>({{ is().furnitureDepreciation | smartDecimal }})</td></tr>
+                <tr class="font-bold text-teal-700 bg-teal-50"><td>{{ 'REPORTS.NET_BEFORE_TAX' | t }}</td><td>{{ is().netProfitBeforeTax | smartDecimal }}</td></tr>
+                <tr><td class="ps-6">({{ 'REPORTS.TAX' | t }})</td><td>({{ is().tax | smartDecimal }})</td></tr>
+                <tr class="font-bold text-slate-800 bg-slate-100"><td>{{ 'REPORTS.NET_AFTER_TAX' | t }}</td><td>{{ is().netProfitAfterTax | smartDecimal }}</td></tr>
               </tbody>
             </table>
           </div>
@@ -103,14 +104,14 @@ import { TranslateService } from '../../../core/services/translate.service';
             <table class="data-table">
               <tbody>
                 <tr class="bg-emerald-50 font-semibold"><td colspan="2">{{ 'REPORTS.ASSETS' | t }}</td></tr>
-                <tr><td class="ps-6">{{ 'BANKS.TITLE' | t }}</td><td>{{ report()!.balanceSheet.assets.banks | number:'1.2-2' }}</td></tr>
-                <tr><td class="ps-6">{{ 'INVENTORY.TITLE' | t }}</td><td>{{ report()!.balanceSheet.assets.inventory | number:'1.2-2' }}</td></tr>
-                <tr><td class="ps-6">{{ 'NAV.ASSETS' | t }}</td><td>{{ report()!.balanceSheet.assets.fixedAssets | number:'1.2-2' }}</td></tr>
-                <tr class="font-bold"><td>{{ 'COMMON.TOTAL' | t }}</td><td>{{ report()!.balanceSheet.assets.total | number:'1.2-2' }}</td></tr>
+                <tr><td class="ps-6">{{ 'BANKS.TITLE' | t }}</td><td>{{ report()!.balanceSheet.assets.banks | smartDecimal }}</td></tr>
+                <tr><td class="ps-6">{{ 'INVENTORY.TITLE' | t }}</td><td>{{ report()!.balanceSheet.assets.inventory | smartDecimal }}</td></tr>
+                <tr><td class="ps-6">{{ 'NAV.ASSETS' | t }}</td><td>{{ report()!.balanceSheet.assets.fixedAssets | smartDecimal }}</td></tr>
+                <tr class="font-bold"><td>{{ 'COMMON.TOTAL' | t }}</td><td>{{ report()!.balanceSheet.assets.total | smartDecimal }}</td></tr>
                 <tr class="bg-rose-50 font-semibold"><td colspan="2">{{ 'REPORTS.LIABILITIES' | t }}</td></tr>
-                <tr><td class="ps-6">{{ 'SUPPLIERS.TITLE' | t }}</td><td>{{ report()!.balanceSheet.liabilities.suppliersDue | number:'1.2-2' }}</td></tr>
-                <tr class="font-bold"><td>{{ 'COMMON.TOTAL' | t }}</td><td>{{ report()!.balanceSheet.liabilities.total | number:'1.2-2' }}</td></tr>
-                <tr class="bg-teal-50 font-semibold"><td>{{ 'REPORTS.EQUITY' | t }}</td><td>{{ report()!.balanceSheet.equity.netProfit | number:'1.2-2' }}</td></tr>
+                <tr><td class="ps-6">{{ 'SUPPLIERS.TITLE' | t }}</td><td>{{ report()!.balanceSheet.liabilities.suppliersDue | smartDecimal }}</td></tr>
+                <tr class="font-bold"><td>{{ 'COMMON.TOTAL' | t }}</td><td>{{ report()!.balanceSheet.liabilities.total | smartDecimal }}</td></tr>
+                <tr class="bg-teal-50 font-semibold"><td>{{ 'REPORTS.EQUITY' | t }}</td><td>{{ report()!.balanceSheet.equity.netProfit | smartDecimal }}</td></tr>
               </tbody>
             </table>
           </div>

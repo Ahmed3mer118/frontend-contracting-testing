@@ -1,7 +1,8 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { DecimalPipe, DatePipe } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
+import { SmartDecimalPipe } from '../../../shared/pipes/smart-decimal.pipe';
 import { DateFilterComponent, DateFilterValue } from '../../../shared/components/date-filter/date-filter.component';
 import { matchesSearch } from '../../../shared/utils/filter.util';
 import { ModalComponent } from '../../../shared/components/modal/modal.component';
@@ -20,7 +21,7 @@ interface Warehouse { id: string; name_ar: string; name_en: string; }
 @Component({
   selector: 'app-inventory-page',
   standalone: true,
-  imports: [FormsModule, DecimalPipe, DatePipe, TranslatePipe, DateFilterComponent, ModalComponent, LoadingSpinnerComponent],
+  imports: [FormsModule, SmartDecimalPipe, DatePipe, TranslatePipe, DateFilterComponent, ModalComponent, LoadingSpinnerComponent],
   template: `
     <app-loading-spinner [show]="initialLoading()" />
     <div class="space-y-6">
@@ -40,7 +41,7 @@ interface Warehouse { id: string; name_ar: string; name_en: string; }
         @if (totals()) {
           <div class="stat-card border-s-emerald-500 md:col-span-2">
             <p class="text-sm text-slate-500">{{ 'INVENTORY.GRAND_TOTAL' | t }}</p>
-            <p class="text-2xl font-bold">{{ totals()!['grandTotal'] | number:'1.2-2' }} EGP</p>
+            <p class="text-2xl font-bold">{{ totals()!['grandTotal'] | smartDecimal }} EGP</p>
           </div>
         }
       </div>
@@ -105,7 +106,7 @@ interface Warehouse { id: string; name_ar: string; name_en: string; }
               <span class="text-slate-500 ms-2">{{ entry.entry_date | date:'shortDate' }}</span>
             </div>
             <div class="flex items-center gap-2">
-              <span class="font-bold text-teal-700">{{ entry.totalInvoiceAmount | number:'1.2-2' }} EGP</span>
+              <span class="font-bold text-teal-700">{{ entry.totalInvoiceAmount | smartDecimal }} EGP</span>
               <button type="button" class="btn-secondary !py-1 !px-2" (click)="openEditEntry(entry)">{{ 'COMMON.EDIT' | t }}</button>
             </div>
           </div>
@@ -114,8 +115,8 @@ interface Warehouse { id: string; name_ar: string; name_en: string; }
               <tr>
                 <th>{{ 'PURCHASES.ROW_NUMBER' | t }}</th>
                 <th>{{ 'INVENTORY.DESCRIPTION' | t }}</th>
-                <th>{{ 'INVENTORY.QUANTITY_IN' | t }}</th>
-                <th>{{ 'INVENTORY.QUANTITY_OUT' | t }}</th>
+                <th>{{ 'INVENTORY.QUANTITY_IN' | t }} (m²)</th>
+                <th>{{ 'INVENTORY.QUANTITY_OUT' | t }} (m²)</th>
                 <th>{{ 'INVENTORY.CATEGORY' | t }}</th>
                 <th>{{ 'INVENTORY.REMAINING' | t }}</th>
                 <th>{{ 'INVENTORY.INVOICE_TOTAL' | t }}</th>
@@ -126,11 +127,11 @@ interface Warehouse { id: string; name_ar: string; name_en: string; }
                 <tr>
                   <td>{{ i + 1 }}</td>
                   <td>{{ item.item_name_ar }}</td>
-                  <td>{{ item.quantity_in }} m²</td>
-                  <td>{{ item.quantity_out }} m²</td>
+                  <td>{{ item.quantity_in | smartDecimal }} m²</td>
+                  <td>{{ item.quantity_out | smartDecimal }} m²</td>
                   <td>{{ item.category }}</td>
-                  <td class="font-medium">{{ item.remaining }} m²</td>
-                  <td>{{ item.line_total | number:'1.2-2' }}</td>
+                  <td class="font-medium">{{ item.remaining | smartDecimal }} m²</td>
+                  <td>{{ item.line_total | smartDecimal }}</td>
                 </tr>
               }
             </tbody>
@@ -150,34 +151,44 @@ interface Warehouse { id: string; name_ar: string; name_en: string; }
       </div>
     </app-modal>
 
-    <app-modal [open]="entryModal()" [title]="editEntryId ? ('INVENTORY.EDIT_ENTRY' | t) : ('INVENTORY.ADD_ENTRY' | t)" (close)="entryModal.set(false)">
+    <app-modal [open]="entryModal()" [wide]="true" [title]="editEntryId ? ('INVENTORY.EDIT_ENTRY' | t) : ('INVENTORY.ADD_ENTRY' | t)" (close)="entryModal.set(false)">
       <div class="grid md:grid-cols-2 gap-4 mb-4">
         <div class="form-field"><label class="form-label">{{ 'INVENTORY.WAREHOUSES' | t }}</label>
           <select class="input input-lg" [(ngModel)]="entryForm.warehouse_id" (ngModelChange)="saveEntryDraft()">@for (w of warehouses(); track w.id){<option [value]="w.id">{{ warehouseName(w) }}</option>}</select>
         </div>
         <div class="form-field"><label class="form-label">{{ 'COMMON.DATE' | t }}</label><input class="input input-lg" type="date" [(ngModel)]="entryForm.entry_date" (ngModelChange)="saveEntryDraft()" /></div>
       </div>
-      <table class="data-table modal-form-table mb-2">
-        <thead><tr><th>{{ 'PURCHASES.ROW_NUMBER' | t }}</th><th>{{ 'INVENTORY.DESCRIPTION' | t }}</th><th>{{ 'INVENTORY.CATEGORY' | t }}</th><th>{{ 'INVENTORY.QUANTITY_IN' | t }} (m²)</th><th>{{ 'INVENTORY.QUANTITY_OUT' | t }} (m²)</th><th>{{ 'INVENTORY.INVOICE_TOTAL' | t }}</th><th></th></tr></thead>
-        <tbody>
-          @for (item of entryForm.items; track $index; let i = $index) {
-            <tr>
-              <td>{{ i + 1 }}</td>
-              <td><input class="input input-lg" [(ngModel)]="item.item_name_ar" (ngModelChange)="saveEntryDraft()" /></td>
-              <td><select class="input input-lg" [(ngModel)]="item.category" (ngModelChange)="saveEntryDraft()">
-                <option value="">{{ 'INVENTORY.SELECT_CATEGORY' | t }}</option>
-                @for (c of categories(); track c.id) {
-                  <option [value]="c.name_ar">{{ categoryLabel(c) }}</option>
-                }
-              </select></td>
-              <td><input class="input input-lg" type="number" [(ngModel)]="item.quantity_in" (ngModelChange)="saveEntryDraft()" /></td>
-              <td><input class="input input-lg" type="number" [(ngModel)]="item.quantity_out" (ngModelChange)="saveEntryDraft()" /></td>
-              <td><input class="input input-lg" type="number" [(ngModel)]="item.line_total" (ngModelChange)="saveEntryDraft()" /></td>
-              <td><button type="button" class="btn-danger !py-1 !px-2" (click)="removeEntryItem(i)" [disabled]="entryForm.items.length === 1">×</button></td>
-            </tr>
-          }
-        </tbody>
-      </table>
+      <div class="inventory-entry-table mb-2">
+        <table class="data-table modal-form-table">
+          <thead><tr>
+            <th>{{ 'PURCHASES.ROW_NUMBER' | t }}</th>
+            <th>{{ 'INVENTORY.DESCRIPTION' | t }}</th>
+            <th>{{ 'INVENTORY.CATEGORY' | t }}</th>
+            <th>{{ 'INVENTORY.QUANTITY_IN' | t }} (m²)</th>
+            <th>{{ 'INVENTORY.QUANTITY_OUT' | t }} (m²)</th>
+            <th>{{ 'INVENTORY.INVOICE_TOTAL' | t }}</th>
+            <th></th>
+          </tr></thead>
+          <tbody>
+            @for (item of entryForm.items; track $index; let i = $index) {
+              <tr>
+                <td>{{ i + 1 }}</td>
+                <td><input class="input input-lg" [(ngModel)]="item.item_name_ar" (ngModelChange)="saveEntryDraft()" /></td>
+                <td><select class="input input-lg" [(ngModel)]="item.category" (ngModelChange)="saveEntryDraft()">
+                  <option value="">{{ 'INVENTORY.SELECT_CATEGORY' | t }}</option>
+                  @for (c of categories(); track c.id) {
+                    <option [value]="c.name_ar">{{ categoryLabel(c) }}</option>
+                  }
+                </select></td>
+                <td><input class="input input-lg qty-input" type="number" step="0.01" min="0" [(ngModel)]="item.quantity_in" (ngModelChange)="saveEntryDraft()" placeholder="0" /></td>
+                <td><input class="input input-lg qty-input" type="number" step="0.01" min="0" [(ngModel)]="item.quantity_out" (ngModelChange)="saveEntryDraft()" placeholder="0" /></td>
+                <td><input class="input input-lg" type="number" step="0.01" min="0" [(ngModel)]="item.line_total" (ngModelChange)="saveEntryDraft()" /></td>
+                <td><button type="button" class="btn-danger !py-1 !px-2" (click)="removeEntryItem(i)" [disabled]="entryForm.items.length === 1">×</button></td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
       <button type="button" class="btn-secondary mb-2" (click)="addEntryItem()">+ {{ 'COMMON.ADD' | t }}</button>
       <div modal-footer class="flex gap-2 justify-end w-full">
         <button type="button" class="btn-secondary" (click)="clearEntryForm()">{{ 'INVENTORY.CLEAR_ENTRY' | t }}</button>

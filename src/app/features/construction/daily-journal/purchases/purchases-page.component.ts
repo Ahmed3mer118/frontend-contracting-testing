@@ -1,6 +1,7 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { DecimalPipe, DatePipe } from '@angular/common';
+import { DatePipe } from '@angular/common';
+import { SmartDecimalPipe } from '../../../../shared/pipes/smart-decimal.pipe';
 import { TranslatePipe } from '../../../../shared/pipes/translate.pipe';
 import { matchesSearch } from '../../../../shared/utils/filter.util';
 import { DateFilterComponent, DateFilterValue } from '../../../../shared/components/date-filter/date-filter.component';
@@ -16,7 +17,7 @@ import { Purchase, TotalsMap } from '../../models/construction.models';
 @Component({
   selector: 'app-purchases-page',
   standalone: true,
-  imports: [FormsModule, DecimalPipe, DatePipe, TranslatePipe, DateFilterComponent, ModalComponent, LoadingSpinnerComponent],
+  imports: [FormsModule, SmartDecimalPipe, DatePipe, TranslatePipe, DateFilterComponent, ModalComponent, LoadingSpinnerComponent],
   template: `
     <app-loading-spinner [show]="initialLoading()" />
     <div class="space-y-6">
@@ -27,11 +28,11 @@ import { Purchase, TotalsMap } from '../../models/construction.models';
       <app-date-filter [showSearch]="true" searchPlaceholderKey="PURCHASES.SEARCH_PLACEHOLDER" (filterChange)="load($event)" />
       @if (totals()) {
         <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
-          <div class="stat-card border-s-emerald-500"><p class="text-sm text-slate-500">{{ 'PURCHASES.TOTAL_CASH' | t }}</p><p class="text-xl font-bold">{{ totals()!['totalCash'] | number:'1.2-2' }}</p></div>
-          <div class="stat-card border-s-amber-500"><p class="text-sm text-slate-500">{{ 'PURCHASES.TOTAL_CREDIT' | t }}</p><p class="text-xl font-bold">{{ totals()!['totalCredit'] | number:'1.2-2' }}</p></div>
-          <div class="stat-card border-s-teal-500"><p class="text-sm text-slate-500">{{ 'COMMON.TOTAL' | t }}</p><p class="text-xl font-bold">{{ totals()!['totalPurchases'] | number:'1.2-2' }}</p></div>
-          <div class="stat-card border-s-rose-500"><p class="text-sm text-slate-500">{{ 'COMMON.DUE' | t }}</p><p class="text-xl font-bold">{{ totals()!['totalDue'] | number:'1.2-2' }}</p></div>
-          <div class="stat-card border-s-blue-500"><p class="text-sm text-slate-500">{{ 'PURCHASES.ACQUISITION_COST' | t }}</p><p class="text-xl font-bold">{{ totals()!['totalAcquisitionCost'] | number:'1.2-2' }}</p></div>
+          <div class="stat-card border-s-emerald-500"><p class="text-sm text-slate-500">{{ 'PURCHASES.TOTAL_CASH' | t }}</p><p class="text-xl font-bold">{{ totals()!['totalCash'] | smartDecimal }}</p></div>
+          <div class="stat-card border-s-amber-500"><p class="text-sm text-slate-500">{{ 'PURCHASES.TOTAL_CREDIT' | t }}</p><p class="text-xl font-bold">{{ totals()!['totalCredit'] | smartDecimal }}</p></div>
+          <div class="stat-card border-s-teal-500"><p class="text-sm text-slate-500">{{ 'COMMON.TOTAL' | t }}</p><p class="text-xl font-bold">{{ totals()!['totalPurchases'] | smartDecimal }}</p></div>
+          <div class="stat-card border-s-rose-500"><p class="text-sm text-slate-500">{{ 'COMMON.DUE' | t }}</p><p class="text-xl font-bold">{{ totals()!['totalDue'] | smartDecimal }}</p></div>
+          <div class="stat-card border-s-blue-500"><p class="text-sm text-slate-500">{{ 'PURCHASES.ACQUISITION_COST' | t }}</p><p class="text-xl font-bold">{{ totals()!['totalAcquisitionCost'] | smartDecimal }}</p></div>
         </div>
       }
       @for (p of items(); track p.id) {
@@ -43,11 +44,11 @@ import { Purchase, TotalsMap } from '../../models/construction.models';
               <p class="text-sm text-slate-600 mt-1">{{ 'SALES.INVOICE_DATE' | t }}: {{ p.invoice_date | date:'shortDate' }}</p>
               <p class="acquisition-cost">
                 <span>{{ 'PURCHASES.ACQUISITION_COST' | t }}</span>
-                <span>{{ acquisitionCost(p) | number:'1.2-2' }} EGP</span>
+                <span>{{ acquisitionCost(p) | smartDecimal }} EGP</span>
               </p>
             </div>
             <div class="flex flex-col items-end gap-2">
-              <span class="text-lg font-bold text-teal-700">{{ 'PURCHASES.INVOICE_TOTAL' | t }}: {{ invoiceTotal(p) | number:'1.2-2' }} EGP</span>
+              <span class="text-lg font-bold text-teal-700">{{ 'PURCHASES.INVOICE_TOTAL' | t }}: {{ invoiceTotal(p) | smartDecimal }} EGP</span>
               <span class="badge">{{ p.payment_type === 'cash' ? ('COMMON.CASH' | t) : ('COMMON.CREDIT' | t) }}</span>
               <button type="button" class="btn-secondary !py-1 !px-2" (click)="openEdit(p)">{{ 'COMMON.EDIT' | t }}</button>
             </div>
@@ -59,8 +60,8 @@ import { Purchase, TotalsMap } from '../../models/construction.models';
                 <tr>
                   <td>{{ item.rowNumber ?? (item.sort_order ?? 0) + 1 }}</td>
                   <td>{{ item.item_name_ar }}</td>
-                  <td>{{ item.amount | number:'1.2-2' }}</td>
-                  <td class="font-medium">{{ item.runningTotal | number:'1.2-2' }}</td>
+                  <td>{{ item.amount | smartDecimal }}</td>
+                  <td class="font-medium">{{ item.runningTotal | smartDecimal }}</td>
                   <td>{{ p.invoice_date | date:'shortDate' }}</td>
                 </tr>
               }
@@ -92,14 +93,14 @@ import { Purchase, TotalsMap } from '../../models/construction.models';
               <td>{{ i + 1 }}</td>
               <td><input class="input" [(ngModel)]="item.item_name_ar" (ngModelChange)="saveDraft()" /></td>
               <td><input class="input" type="number" [(ngModel)]="item.amount" (ngModelChange)="recalc()" /></td>
-              <td class="font-medium">{{ runningTotal(i) | number:'1.2-2' }}</td>
+              <td class="font-medium">{{ runningTotal(i) | smartDecimal }}</td>
               <td><button type="button" class="btn-danger !py-1 !px-2" (click)="removeItem(i)" [disabled]="form.items.length === 1">×</button></td>
             </tr>
           }
         </tbody>
       </table>
       <button type="button" class="btn-secondary" (click)="addItem()">+ {{ 'COMMON.ADD' | t }}</button>
-      <p class="text-end font-bold text-teal-700 mt-3">{{ 'PURCHASES.INVOICE_TOTAL' | t }}: {{ formInvoiceTotal() | number:'1.2-2' }} EGP</p>
+      <p class="text-end font-bold text-teal-700 mt-3">{{ 'PURCHASES.INVOICE_TOTAL' | t }}: {{ formInvoiceTotal() | smartDecimal }} EGP</p>
       <div modal-footer class="flex gap-2 justify-end w-full">
         <button type="button" class="btn-secondary" (click)="closeModal()">{{ 'COMMON.CANCEL' | t }}</button>
         <button type="button" class="btn-primary" (click)="save()">{{ 'COMMON.SAVE' | t }}</button>

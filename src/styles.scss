@@ -120,6 +120,26 @@
     @apply w-full max-w-2xl mt-8 mb-8 bg-white rounded-2xl shadow-xl border border-slate-100;
   }
 
+  .modal-panel-wide {
+    @apply max-w-5xl;
+  }
+
+  .table-scroll-wrap {
+    @apply overflow-x-auto border border-slate-200 rounded-lg max-w-full;
+  }
+
+  .inventory-entry-table {
+    @apply overflow-x-auto border border-slate-200 rounded-lg bg-white;
+  }
+
+  .inventory-entry-table .qty-input {
+    @apply w-24 min-w-[5rem] text-center;
+  }
+
+  .modal-form-table {
+    @apply min-w-[640px] w-full;
+  }
+
   .modal-header {
     @apply flex items-center justify-between px-6 py-4 border-b border-slate-100;
   }
