@@ -1,0 +1,76 @@
+{
+  "APP": { "TITLE": "Construction System", "LOADING": "Loading..." },
+  "NAV": {
+    "DASHBOARD": "Dashboard", "PROJECTS": "Projects", "DAILY_JOURNAL": "Daily Journal",
+    "ASSETS": "Assets", "BANKS": "Banks", "SALES": "Sales", "PURCHASES": "Purchases",
+    "CONTRACTORS": "Contractors", "SUPPLIERS": "Suppliers", "CUSTOMERS": "Customers",
+    "EXPENSES": "General Expenses", "INVENTORY": "Inventory", "REPORTS": "Reports", "SETTINGS": "Settings"
+  },
+  "COMMON": {
+    "ADD": "Add", "EDIT": "Edit", "DELETE": "Delete", "SAVE": "Save", "CANCEL": "Cancel",
+    "SEARCH": "Search", "APPLY": "Apply", "CLEAR": "Clear", "FROM_DATE": "From Date", "TO_DATE": "To Date",
+    "DATE": "Date", "NAME": "Name", "VALUE": "Value", "TOTAL": "Total", "ACTIONS": "Actions",
+    "NO_DATA": "No data available", "CASH": "Cash", "CREDIT": "Credit", "PAYMENT": "Payment", "DUE": "Due",
+    "PROJECT": "Project", "SELECT_PROJECT": "Select Project", "AMOUNT": "Amount", "DESCRIPTION": "Description",
+    "QUANTITY": "Quantity", "UNIT": "Unit", "NOTES": "Notes"
+  },
+  "MESSAGES": {
+    "SAVE_SUCCESS": "Saved successfully", "DELETE_SUCCESS": "Deleted successfully",
+    "LOAD_ERROR": "Error loading data", "SAVE_ERROR": "Error saving data",
+    "SELECT_PROJECT_FIRST": "Please select a project first"
+  },
+  "DASHBOARD": {
+    "TITLE": "Dashboard", "COMPANY_STATS": "Company Statistics",
+    "GROSS_PROFIT": "Gross Profit", "NET_PROFIT": "Net Profit",
+    "TOTAL_SALES": "Total Sales", "TOTAL_PURCHASES": "Total Purchases",
+    "PROJECT_COUNT": "Project Count", "ALL_PROJECTS": "All Projects",
+    "SALES_VS_PURCHASES": "Sales vs Purchases", "PROJECTS_PROFIT": "Projects Profit"
+  },
+  "PROJECTS": {
+    "TITLE": "Projects", "CODE": "Project Code", "NAME": "Project Name",
+    "ACTIVITY": "Company Activity", "SEARCH_PLACEHOLDER": "Search by name or code",
+    "STATUS": "Status", "ACTIVE": "Active", "COMPLETED": "Completed", "ON_HOLD": "On Hold", "CANCELLED": "Cancelled",
+    "ADD_TITLE": "Add Project", "EDIT_TITLE": "Edit Project"
+  },
+  "ASSETS": {
+    "TITLE": "Assets", "ASSET_NAME": "Asset Name", "ASSET_VALUE": "Asset Value",
+    "DEPRECIATION_RATE": "Depreciation Rate", "DEPRECIATION": "Depreciation", "NET_ASSET": "Net Asset",
+    "TOTAL_VALUE": "Total Asset Value", "TOTAL_DEPRECIATION": "Total Depreciation", "TOTAL_NET": "Total Net Assets",
+    "ADD_TITLE": "Add Asset", "EDIT_TITLE": "Edit Asset"
+  },
+  "BANKS": {
+    "TITLE": "Banks", "ADD_BANK": "Add Bank", "ADD_TRANSACTION": "Add Transaction",
+    "BANK_NAME": "Bank Name", "DEPOSIT": "Deposit", "WITHDRAWAL": "Withdrawal", "EXPENSE": "Expense", "INTEREST": "Interest",
+    "BALANCE": "Balance", "CLIENT_NAME": "Client Name", "TOTAL_DEPOSITS": "Total Deposits",
+    "TOTAL_WITHDRAWALS": "Total Withdrawals", "TOTAL_EXPENSES": "Total Expenses", "TOTAL_INTEREST": "Total Interest",
+    "TRANSACTION_TYPE": "Transaction Type"
+  },
+  "SALES": {
+    "TITLE": "Sales", "CLIENT_NAME": "Client Name", "INVOICE_NUMBER": "Invoice Number",
+    "INVOICE_DATE": "Invoice Date", "INVOICE_AMOUNT": "Invoice Amount",
+    "TOTAL_CASH": "Total Cash", "TOTAL_CREDIT": "Total Credit", "ADD_TITLE": "Add Sale"
+  },
+  "PURCHASES": {
+    "TITLE": "Purchases", "SUPPLIER_NAME": "Supplier Name", "ITEM": "Item", "ROW_NUMBER": "#",
+    "ACQUISITION_COST": "Acquisition Cost", "TOTAL_CASH": "Total Cash", "TOTAL_CREDIT": "Total Credit",
+    "PURCHASE_TYPE": "Purchase Type", "ITEMS_TABLE": "Purchase Items", "ADD_TITLE": "Add Purchase", "EDIT_TITLE": "Edit Purchase"
+  },
+  "CONTRACTORS": { "TITLE": "Contractors", "NAME": "Contractor Name", "TOTAL_PAYMENTS": "Total Payments", "TOTAL_DUE": "Total Due", "ADD_TITLE": "Add Contractor / Payment" },
+  "SUPPLIERS": { "TITLE": "Suppliers", "NAME": "Supplier Name", "ADD_TITLE": "Add Supplier / Payment" },
+  "CUSTOMERS": { "TITLE": "Customers", "NAME": "Customer Name", "ADD_TITLE": "Add Customer / Payment" },
+  "EXPENSES": { "TITLE": "General & Admin Expenses", "DESCRIPTION": "Description", "ADD_TITLE": "Add Expense" },
+  "INVENTORY": {
+    "TITLE": "Inventory", "WAREHOUSES": "Warehouses", "WAREHOUSE_COUNT": "Warehouse Count",
+    "ADD_WAREHOUSE": "Add Warehouse", "EDIT_WAREHOUSE": "Edit Warehouse", "ADD_ENTRY": "Add Warehouse Entry",
+    "CATEGORY": "Category", "UNIT": "Unit", "QUANTITY_IN": "In", "QUANTITY_OUT": "Out",
+    "REMAINING": "Remaining", "INVOICE_TOTAL": "Invoice Total", "GRAND_TOTAL": "Grand Total",
+    "DESCRIPTION": "Description", "WAREHOUSE_NAME": "Warehouse Name"
+  },
+  "REPORTS": {
+    "TITLE": "Reports", "PROFIT_REPORT": "Profit Report",
+    "GROSS_PROFIT_FORMULA": "Gross Profit = Total Sales − (Purchases + Contractors + Suppliers)",
+    "NET_PROFIT_FORMULA": "Net Profit = Gross Profit − (General Expenses + Bank Expenses + Depreciation)",
+    "FROM_DATABASE": "Values calculated from database"
+  },
+  "SETTINGS": { "TITLE": "Settings", "DEPRECIATION_RATE": "Default Depreciation Rate", "DEFAULT_UNIT": "Default Unit", "CURRENCY": "Currency" }
+}

@@ -1,0 +1,76 @@
+{
+  "APP": { "TITLE": "نظام المقاولات", "LOADING": "جاري التحميل..." },
+  "NAV": {
+    "DASHBOARD": "لوحة التحكم", "PROJECTS": "المشروعات", "DAILY_JOURNAL": "القيود اليومية",
+    "ASSETS": "الأصول", "BANKS": "البنوك", "SALES": "المبيعات", "PURCHASES": "المشتريات",
+    "CONTRACTORS": "المقاولين", "SUPPLIERS": "الموردين", "CUSTOMERS": "العملاء",
+    "EXPENSES": "مصاريف عمومية وإدارية", "INVENTORY": "المخازن", "REPORTS": "التقارير", "SETTINGS": "الإعدادات"
+  },
+  "COMMON": {
+    "ADD": "إضافة", "EDIT": "تعديل", "DELETE": "حذف", "SAVE": "حفظ", "CANCEL": "إلغاء",
+    "SEARCH": "بحث", "APPLY": "تطبيق", "CLEAR": "مسح", "FROM_DATE": "من تاريخ", "TO_DATE": "إلى تاريخ",
+    "DATE": "التاريخ", "NAME": "الاسم", "VALUE": "القيمة", "TOTAL": "الإجمالي", "ACTIONS": "الإجراءات",
+    "NO_DATA": "لا توجد بيانات", "CASH": "كاش", "CREDIT": "آجل", "PAYMENT": "دفعة", "DUE": "مستحق",
+    "PROJECT": "المشروع", "SELECT_PROJECT": "اختر المشروع", "AMOUNT": "المبلغ", "DESCRIPTION": "الوصف",
+    "QUANTITY": "الكمية", "UNIT": "الوحدة", "NOTES": "ملاحظات"
+  },
+  "MESSAGES": {
+    "SAVE_SUCCESS": "تم الحفظ بنجاح", "DELETE_SUCCESS": "تم الحذف بنجاح",
+    "LOAD_ERROR": "حدث خطأ أثناء تحميل البيانات", "SAVE_ERROR": "حدث خطأ أثناء الحفظ",
+    "SELECT_PROJECT_FIRST": "يرجى اختيار مشروع أولاً"
+  },
+  "DASHBOARD": {
+    "TITLE": "لوحة التحكم", "COMPANY_STATS": "إحصائيات الشركة",
+    "GROSS_PROFIT": "مجمل الربح", "NET_PROFIT": "صافي الربح",
+    "TOTAL_SALES": "إجمالي المبيعات", "TOTAL_PURCHASES": "إجمالي المشتريات",
+    "PROJECT_COUNT": "عدد المشروعات", "ALL_PROJECTS": "كل المشروعات",
+    "SALES_VS_PURCHASES": "المبيعات مقابل المشتريات", "PROJECTS_PROFIT": "أرباح المشروعات"
+  },
+  "PROJECTS": {
+    "TITLE": "المشروعات", "CODE": "كود المشروع", "NAME": "اسم المشروع",
+    "ACTIVITY": "نشاط الشركة", "SEARCH_PLACEHOLDER": "بحث بالاسم أو الكود",
+    "STATUS": "الحالة", "ACTIVE": "نشط", "COMPLETED": "مكتمل", "ON_HOLD": "متوقف", "CANCELLED": "ملغي",
+    "ADD_TITLE": "إضافة مشروع", "EDIT_TITLE": "تعديل مشروع"
+  },
+  "ASSETS": {
+    "TITLE": "الأصول", "ASSET_NAME": "اسم الأصل", "ASSET_VALUE": "قيمة الأصل",
+    "DEPRECIATION_RATE": "نسبة الإهلاك", "DEPRECIATION": "الإهلاك", "NET_ASSET": "صافي الأصل",
+    "TOTAL_VALUE": "إجمالي قيمة الأصول", "TOTAL_DEPRECIATION": "إجمالي الإهلاك", "TOTAL_NET": "إجمالي صافي الأصول",
+    "ADD_TITLE": "إضافة أصل", "EDIT_TITLE": "تعديل أصل"
+  },
+  "BANKS": {
+    "TITLE": "البنوك", "ADD_BANK": "إضافة بنك", "ADD_TRANSACTION": "إضافة حركة",
+    "BANK_NAME": "اسم البنك", "DEPOSIT": "إيداع", "WITHDRAWAL": "سحب", "EXPENSE": "مصروف", "INTEREST": "فوائد",
+    "BALANCE": "الرصيد", "CLIENT_NAME": "اسم العميل", "TOTAL_DEPOSITS": "إجمالي الإيداعات",
+    "TOTAL_WITHDRAWALS": "إجمالي المسحوبات", "TOTAL_EXPENSES": "إجمالي المصروفات", "TOTAL_INTEREST": "إجمالي الفوائد",
+    "TRANSACTION_TYPE": "نوع الحركة"
+  },
+  "SALES": {
+    "TITLE": "المبيعات", "CLIENT_NAME": "اسم العميل", "INVOICE_NUMBER": "رقم الفاتورة",
+    "INVOICE_DATE": "تاريخ الفاتورة", "INVOICE_AMOUNT": "مبلغ الفاتورة",
+    "TOTAL_CASH": "إجمالي الكاش", "TOTAL_CREDIT": "إجمالي الآجل", "ADD_TITLE": "إضافة مبيعات"
+  },
+  "PURCHASES": {
+    "TITLE": "المشتريات", "SUPPLIER_NAME": "اسم المورد", "ITEM": "البند", "ROW_NUMBER": "م",
+    "ACQUISITION_COST": "تكلفة المجهود للحصول عليها", "TOTAL_CASH": "إجمالي الكاش", "TOTAL_CREDIT": "إجمالي الآجل",
+    "PURCHASE_TYPE": "نوع الشراء", "ITEMS_TABLE": "جدول المشتريات", "ADD_TITLE": "إضافة مشتريات", "EDIT_TITLE": "تعديل مشتريات"
+  },
+  "CONTRACTORS": { "TITLE": "المقاولين", "NAME": "اسم المقاول", "TOTAL_PAYMENTS": "إجمالي الدفعات", "TOTAL_DUE": "إجمالي المستحق", "ADD_TITLE": "إضافة مقاول / دفعة" },
+  "SUPPLIERS": { "TITLE": "الموردين", "NAME": "اسم المورد", "ADD_TITLE": "إضافة مورد / دفعة" },
+  "CUSTOMERS": { "TITLE": "العملاء", "NAME": "اسم العميل", "ADD_TITLE": "إضافة عميل / دفعة" },
+  "EXPENSES": { "TITLE": "مصاريف عمومية وإدارية", "DESCRIPTION": "الوصف", "ADD_TITLE": "إضافة مصروف" },
+  "INVENTORY": {
+    "TITLE": "المخازن", "WAREHOUSES": "المخازن", "WAREHOUSE_COUNT": "عدد المخازن",
+    "ADD_WAREHOUSE": "إضافة مخزن", "EDIT_WAREHOUSE": "تعديل مخزن", "ADD_ENTRY": "إضافة حركة مخزن",
+    "CATEGORY": "التصنيف", "UNIT": "الوحدة", "QUANTITY_IN": "وارد", "QUANTITY_OUT": "منصرف",
+    "REMAINING": "المتبقي", "INVOICE_TOTAL": "إجمالي الفاتورة", "GRAND_TOTAL": "إجمالي كل الفواتير",
+    "DESCRIPTION": "البيان", "WAREHOUSE_NAME": "اسم المخزن"
+  },
+  "REPORTS": {
+    "TITLE": "التقارير", "PROFIT_REPORT": "تقرير الأرباح",
+    "GROSS_PROFIT_FORMULA": "مجمل الربح = إجمالي المبيعات − (المشتريات + المقاولين + الموردين)",
+    "NET_PROFIT_FORMULA": "صافي الربح = مجمل الربح − (مصروفات عمومية + مصروفات البنوك + الإهلاك)",
+    "FROM_DATABASE": "القيم محسوبة من قاعدة البيانات"
+  },
+  "SETTINGS": { "TITLE": "الإعدادات", "DEPRECIATION_RATE": "نسبة الإهلاك الافتراضية", "DEFAULT_UNIT": "الوحدة الافتراضية", "CURRENCY": "العملة" }
+}

@@ -1,0 +1,430 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .input {
+    @apply w-full px-3 py-2.5 border border-slate-200 rounded-lg bg-white
+      focus:outline-none focus:ring-2 focus:ring-teal-500/40 focus:border-teal-500 text-sm text-slate-800;
+  }
+
+  .input-lg {
+    @apply px-4 py-3 text-base min-h-[44px];
+  }
+
+  .acquisition-cost {
+    @apply inline-flex items-center gap-2 mt-2 px-3 py-1.5 rounded-lg bg-blue-50 border border-blue-100 text-sm font-semibold text-blue-800;
+  }
+
+  .warehouse-card {
+    @apply card p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-s-4 border-s-teal-500;
+  }
+
+  .warehouse-card-active {
+    @apply ring-2 ring-teal-500 bg-teal-50/50;
+  }
+
+  .modal-form-table .input {
+    @apply min-w-[120px];
+  }
+
+  .modal-form-table td {
+    @apply p-2 align-middle;
+  }
+
+  .btn-primary {
+    @apply px-4 py-2.5 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition text-sm font-medium shadow-sm;
+  }
+
+  .btn-secondary {
+    @apply px-4 py-2.5 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200 transition text-sm font-medium;
+  }
+
+  .btn-danger {
+    @apply px-4 py-2.5 bg-rose-50 text-rose-700 rounded-lg hover:bg-rose-100 transition text-sm font-medium;
+  }
+
+  .card {
+    @apply bg-white rounded-xl shadow-sm border border-slate-100 p-5;
+  }
+
+  .stat-card {
+    @apply bg-white rounded-xl shadow-sm border border-slate-100 p-5 border-s-4;
+  }
+
+  .badge {
+    @apply inline-block px-2.5 py-1 text-xs rounded-full bg-teal-50 text-teal-700 font-medium;
+  }
+
+  .form-label {
+    @apply block text-sm font-medium text-slate-600 mb-1.5;
+  }
+
+  .form-field {
+    @apply w-full;
+  }
+
+  .filter-bar {
+    @apply flex flex-col lg:flex-row lg:items-end gap-3 p-4 bg-white rounded-xl border border-slate-200 shadow-sm;
+  }
+
+  .filter-fields {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:flex lg:flex-1 lg:flex-nowrap gap-3 items-end min-w-0;
+  }
+
+  .filter-field-item {
+    @apply w-full lg:w-auto lg:min-w-[140px] lg:max-w-[180px] lg:flex-1;
+  }
+
+  .filter-field-search {
+    @apply w-full lg:min-w-[200px] lg:max-w-none lg:flex-[2];
+  }
+
+  .filter-actions {
+    @apply flex gap-2 shrink-0 lg:pb-0.5;
+  }
+
+  .page-header {
+    @apply flex flex-wrap items-center justify-between gap-4 mb-6;
+  }
+
+  .page-title {
+    @apply text-2xl font-bold text-slate-800;
+  }
+
+  .table-wrap {
+    @apply card overflow-x-auto p-0;
+  }
+
+  .data-table {
+    @apply w-full text-sm;
+  }
+
+  .data-table th {
+    @apply p-3 text-start text-slate-500 font-medium bg-slate-50 border-b border-slate-100;
+  }
+
+  .data-table td {
+    @apply p-3 border-b border-slate-50 text-slate-700;
+  }
+
+  .data-table tr:hover td {
+    @apply bg-slate-50/80;
+  }
+
+  .modal-backdrop {
+    @apply fixed inset-0 z-50 flex items-start justify-center p-4 bg-slate-900/50 overflow-y-auto;
+  }
+
+  .modal-panel {
+    @apply w-full max-w-2xl mt-8 mb-8 bg-white rounded-2xl shadow-xl border border-slate-100;
+  }
+
+  .modal-header {
+    @apply flex items-center justify-between px-6 py-4 border-b border-slate-100;
+  }
+
+  .modal-title {
+    @apply text-lg font-semibold text-slate-800;
+  }
+
+  .modal-close {
+    @apply text-2xl leading-none text-slate-400 hover:text-slate-600 w-8 h-8 flex items-center justify-center rounded-lg hover:bg-slate-100;
+  }
+
+  .modal-body {
+    @apply px-6 py-5 space-y-4 max-h-[70vh] overflow-y-auto;
+  }
+
+  .modal-footer {
+    @apply flex justify-end gap-2 px-6 py-4 border-t border-slate-100 bg-slate-50/50 rounded-b-2xl;
+  }
+
+  .loading-overlay {
+    @apply fixed inset-0 z-[60] flex flex-col items-center justify-center bg-white/70 backdrop-blur-sm;
+  }
+
+  .loading-spinner {
+    @apply w-10 h-10 border-4 border-teal-200 border-t-teal-600 rounded-full animate-spin;
+  }
+
+  .loading-text {
+    @apply mt-3 text-sm text-slate-600;
+  }
+
+  .toast-container {
+    @apply fixed top-4 end-4 z-[70] flex flex-col gap-2 max-w-sm;
+  }
+
+  .toast {
+    @apply px-4 py-3 rounded-lg shadow-lg text-sm font-medium cursor-pointer animate-[slideIn_0.3s_ease];
+  }
+
+  .toast-success {
+    @apply bg-emerald-600 text-white;
+  }
+
+  .toast-error {
+    @apply bg-rose-600 text-white;
+  }
+
+  .toast-info {
+    @apply bg-slate-800 text-white;
+  }
+
+  .chart-wrap {
+    @apply space-y-3;
+  }
+
+  /* Power BI visual styling */
+  .pbi-visual {
+    @apply bg-[#FAFAFA] rounded-lg border border-[#E1DFDD] p-4 min-h-[280px] flex flex-col;
+    font-family: 'Segoe UI', 'Segoe UI Web (West European)', -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+
+  .pbi-svg {
+    @apply w-full flex-1;
+    min-height: 220px;
+  }
+
+  .pbi-grid {
+    stroke: #E1DFDD;
+    stroke-width: 1;
+  }
+
+  .pbi-axis-line {
+    stroke: #605E5C;
+    stroke-width: 1;
+  }
+
+  .pbi-axis {
+    fill: #605E5C;
+    font-size: 10px;
+  }
+
+  .pbi-category {
+    fill: #323130;
+    font-size: 10px;
+    font-weight: 600;
+  }
+
+  .pbi-data-label {
+    fill: #323130;
+    font-size: 10px;
+    font-weight: 600;
+  }
+
+  .pbi-bar {
+    transition: opacity 0.2s ease;
+  }
+
+  .pbi-bar:hover {
+    opacity: 0.85;
+  }
+
+  .pbi-legend {
+    @apply flex flex-wrap gap-x-4 gap-y-2 pt-3 mt-2 border-t border-[#E1DFDD];
+  }
+
+  .pbi-legend-item {
+    @apply flex items-center gap-2 text-xs text-[#323130];
+  }
+
+  .pbi-legend-dot {
+    @apply w-3 h-3 rounded-sm shrink-0;
+  }
+
+  .pbi-legend-text {
+    @apply text-[#605E5C] max-w-[120px] truncate;
+  }
+
+  .pbi-legend-value {
+    @apply font-semibold text-[#323130] ms-1;
+  }
+
+  .pbi-donut-wrap {
+    @apply flex justify-center py-2;
+  }
+
+  .pbi-donut-segment {
+    transition: opacity 0.2s ease;
+  }
+
+  .pbi-donut-segment:hover {
+    opacity: 0.88;
+  }
+
+  .pbi-donut-total {
+    fill: #323130;
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  .pbi-donut-sub {
+    fill: #605E5C;
+    font-size: 11px;
+  }
+
+  .pbi-empty {
+    @apply flex-1 flex items-center justify-center text-[#A19F9D] text-sm;
+  }
+
+  .pbi-chart-card {
+    @apply bg-white rounded-lg border border-[#E1DFDD] shadow-sm overflow-hidden;
+  }
+
+  .pbi-chart-card-header {
+    @apply px-4 py-3 border-b border-[#E1DFDD] bg-white;
+  }
+
+  .pbi-chart-card-title {
+    @apply text-sm font-semibold text-[#323130];
+  }
+
+  .pbi-chart-card-body {
+    @apply p-2;
+  }
+
+  .not-found {
+    @apply flex items-center justify-center px-6 py-16 text-center;
+    min-height: 50vh;
+  }
+
+  .not-found--full {
+    @apply min-h-screen bg-slate-50;
+  }
+
+  .not-found__content {
+    @apply max-w-md;
+  }
+
+  .not-found__code {
+    @apply text-7xl font-bold text-teal-600 leading-none mb-4;
+  }
+
+  .not-found__title {
+    @apply text-2xl font-semibold text-slate-800 mb-2;
+  }
+
+  .not-found__message {
+    @apply text-slate-500 mb-4;
+  }
+
+  .not-found__path {
+    @apply text-sm font-mono text-slate-400 bg-slate-100 rounded-lg px-3 py-2 mb-6 break-all;
+  }
+
+  .not-found__btn {
+    @apply inline-block px-5 py-2.5 rounded-lg bg-teal-600 text-white text-sm font-medium hover:bg-teal-700 transition;
+  }
+
+  .auth-page {
+    @apply min-h-screen flex items-center justify-center bg-slate-100 px-4 py-10;
+  }
+
+  .auth-card {
+    @apply w-full max-w-md bg-white rounded-2xl shadow-lg border border-slate-100 p-8;
+  }
+
+  .auth-card__header {
+    @apply text-center mb-6;
+  }
+
+  .auth-card__title {
+    @apply text-2xl font-bold text-slate-800;
+  }
+
+  .auth-card__subtitle {
+    @apply text-sm text-slate-500 mt-2;
+  }
+
+  .auth-tabs {
+    @apply grid grid-cols-2 gap-2 mb-6 p-1 bg-slate-100 rounded-xl;
+  }
+
+  .auth-tab {
+    @apply py-2.5 rounded-lg text-sm font-medium text-slate-600 transition;
+  }
+
+  .auth-tab--active {
+    @apply bg-white text-teal-700 shadow-sm;
+  }
+
+  .auth-form {
+    @apply space-y-4;
+  }
+
+  .auth-label {
+    @apply block space-y-1.5 text-sm text-slate-600;
+  }
+
+  .auth-footer {
+    @apply text-center text-sm text-slate-500 mt-5;
+  }
+
+  .auth-footer a {
+    @apply text-teal-600 hover:text-teal-700 font-medium;
+  }
+
+  .auth-hint {
+    @apply text-xs text-slate-400 text-center mt-4;
+  }
+
+  .auth-actions {
+    @apply mt-3;
+  }
+
+  .auth-dev-code {
+    @apply mt-4 text-center text-xs text-amber-700 bg-amber-50 border border-amber-100 rounded-lg py-2 px-3;
+  }
+
+  .auth-lang {
+    @apply flex gap-2 mt-6 justify-center;
+  }
+
+  .auth-lang-btn {
+    @apply px-4 py-1.5 rounded-lg text-sm bg-slate-100 text-slate-600;
+  }
+
+  .auth-lang-btn--active {
+    @apply bg-teal-600 text-white;
+  }
+
+  .welcome-page {
+    @apply min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-100 via-teal-50 to-slate-200 px-4;
+  }
+
+  .welcome-card {
+    @apply text-center max-w-md w-full bg-white rounded-3xl shadow-xl border border-slate-100 p-10;
+  }
+
+  .welcome-logo__svg {
+    @apply w-20 h-20 mx-auto mb-6;
+  }
+
+  .welcome-title {
+    @apply text-3xl font-bold text-slate-800 mb-2;
+  }
+
+  .welcome-subtitle {
+    @apply text-slate-500 mb-8;
+  }
+
+  .welcome-start {
+    @apply inline-block px-8 py-3 rounded-xl bg-teal-600 text-white font-semibold hover:bg-teal-700 transition;
+  }
+}
+
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+body {
+  @apply bg-slate-50 text-slate-900 antialiased;
+  font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+}
+
+html[dir='rtl'] body {
+  font-family: 'Segoe UI', Tahoma, 'Arial', sans-serif;
+}
